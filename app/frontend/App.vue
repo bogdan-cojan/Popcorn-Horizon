@@ -1,20 +1,18 @@
 <template>
-  {{ message }}
-
-  <ButtonCounter />
+  <div id="main">
+    <!-- <Movies /> -->
+    <FormMovie />
+  </div>
 </template>
 
 <script>
-import ButtonCounter from "./components/ButtonCounter.vue";
+import Movies from "./components/Movies.vue";
+import FormMovie from "./components/FormMovie.vue";
 
 export default {
-  data() {
-    return {
-      message: "Hello Vue.js !",
-    };
-  },
   components: {
-    ButtonCounter,
+    Movies,
+    FormMovie,
   },
 };
 </script>

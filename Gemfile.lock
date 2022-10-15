@@ -175,6 +175,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activestorage
   debug
   foreman
   mysql2 (~> 0.5)

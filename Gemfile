@@ -30,3 +30,4 @@ end
 
 gem 'vite_rails'  
 gem 'foreman'
+gem 'activestorage'

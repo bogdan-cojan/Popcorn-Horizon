@@ -1,0 +1,2 @@
+class MoviesArtists < ApplicationRecord
+end
