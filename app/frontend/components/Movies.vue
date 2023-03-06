@@ -1,10 +1,8 @@
 <template>
-  <div
-    class="row row-cols-1 row-cols-md-3 g-4"
-    :key="movie.id"
-    v-for="movie in this.movies"
-  >
-    <MovieCard :movie="movie" />
+  <div class="container-fluid row row-cols-1 row-cols-md-3 g-4">
+    <div class="col" :key="movie.id" v-for="movie in this.movies">
+      <MovieCard :movie="movie" />
+    </div>
   </div>
 </template>
 

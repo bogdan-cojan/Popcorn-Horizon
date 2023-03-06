@@ -18,6 +18,7 @@ class Apis::V1::MoviesController < ApplicationController
 
   def create
     @movie = Movie.new(movie_params)
+    @movie.genres = JSON.parse(movie_params[:genres])
     render json: @movie.errors unless @movie.save
     render json: get_formatted_movie(@movie), status: 201 if @movie.save
   end
@@ -47,7 +48,7 @@ class Apis::V1::MoviesController < ApplicationController
       id: movie.id,
       title: movie.title,
       rating: movie.rating,
-      image: movie.image.blob,
+      image: url_for(movie.image),
       trailer_link: movie.trailer_link,
       year: movie.year,
       running_time: movie.running_time,
