@@ -1,6 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { createApp } from "vue/dist/vue.esm-bundler";
+import Navbar from "../components/Navbar.vue";
 import App from "../App.vue";
+import Users from "../Users.vue";
 
+createApp(Navbar).mount("#navbar");
 createApp(App).mount("#app");
+createApp(Users).mount("#users");

@@ -31,3 +31,5 @@ end
 gem 'vite_rails'  
 gem 'foreman'
 gem 'activestorage'
+gem 'jwt'
+gem 'bcrypt'

@@ -1,4 +1,5 @@
 class Apis::V1::MoviesController < ApplicationController
+  #before_action :jwt_authenticate, only: [:create, :update, :destroy]
 
   def index
     @movies = Movie.all
@@ -56,5 +57,4 @@ class Apis::V1::MoviesController < ApplicationController
       description: movie.description
     }
   end
-
 end

@@ -8,6 +8,7 @@
 
 <script>
 import MovieCard from "./MovieCard.vue";
+import { eventBus } from "../entrypoints/eventBus";
 
 export default {
   data() {
@@ -19,11 +20,14 @@ export default {
     async fetchMovies() {
       const res = await fetch("/apis/v1/movies");
       const data = await res.json();
-      return data;
+      this.movies = data;
     },
   },
   async created() {
-    this.movies = await this.fetchMovies();
+    await this.fetchMovies();
+    eventBus.on('new-movie-added', async () => {
+      await this.fetchMovies();
+    })
   },
   components: {
     MovieCard,

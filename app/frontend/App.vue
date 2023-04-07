@@ -1,59 +1,36 @@
 <template>
   <div id="main">
-    <div class="btn-group" role="group">
-      <button
-        v-on:click="moviesBtnClicked()"
-        type="button"
-        class="btn btn-outline-primary"
-      >
-        Movies
-      </button>
-      <button
-        v-on:click="newMovieBtnClicked()"
-        type="button"
-        class="btn btn-outline-primary"
-      >
-        Create movie
-      </button>
-    </div>
-    <div id="movies">
-      <Movies />
-    </div>
-    <div id="newMovie">
-      <FormMovie />
-    </div>
+    <Movies v-if="isChildVisible" />
+    <FormMovie v-if="!isChildVisible" />
   </div>
 </template>
 
 <script>
 import Movies from "./components/Movies.vue";
 import FormMovie from "./components/FormMovie.vue";
+import { eventBus } from "./entrypoints/eventBus";
 
 export default {
+  name: "App",
+  data() {
+    return {
+      isChildVisible: true,
+    }
+  },
   components: {
     Movies,
-    FormMovie,
+    FormMovie
   },
-  methods: {
-    moviesBtnClicked() {
-      var movies = document.querySelector("#movies");
-      var newMovieForm = document.querySelector("#newMovie");
-      movies.style.display = "block";
-      newMovieForm.style.display = "none";
-    },
-
-    newMovieBtnClicked() {
-      var movies = document.querySelector("#movies");
-      var newMovieForm = document.querySelector("#newMovie");
-      movies.style.display = "none";
-      newMovieForm.style.display = "block";
-    },
+  created() {
+    eventBus.on('movies-btn-clicked', eventData => { 
+      this.isChildVisible = eventData;
+    })
+    eventBus.on('new-movie-btn-clicked', eventData => { 
+      this.isChildVisible = eventData;
+    })
+    eventBus.on('new-movie-added', () => {
+      this.isChildVisible = true;
+    })
   },
 };
 </script>
-
-<style scoped>
-#newMovie {
-  display: none;
-}
-</style>

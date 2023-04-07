@@ -99,6 +99,8 @@
 </template>
 
 <script>
+import { eventBus } from '../entrypoints/eventBus';
+
 export default {
   data() {
     return {
@@ -165,8 +167,9 @@ export default {
         method: "POST",
         body: formData,
       });
-
-      console.log(res.status);
+      if(res.status === 201) {
+        eventBus.emit('new-movie-added');
+      }
     },
   },
 };
