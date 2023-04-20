@@ -3,7 +3,8 @@
     <img :src="movie.image" class="card-img-top rounded" alt="poster_image" />
     <div class="card-body">
       <h5 class="card-title">{{ movie.title }}</h5>
-      <p class="card-text">{{ movie.rating }} ⭐</p>
+      <p class="card-text">{{ movie.rating }} 
+        <i style="color: yellow" class="bi bi-star-fill"></i></p>
     </div>
     <div class="card-footer d-flex justify-content-around">
       <a
@@ -11,14 +12,14 @@
         target="_blank"
         class="btn btn-primary"
         role="button"
-        >▶️ Trailer</a
+        ><i style="color: red" class="bi bi-play-btn-fill"></i> Trailer</a
       >
       <a
         href="/"
         class="btn btn-primary rounded-circle"
         title="Info"
         role="button"
-        >ℹ️</a
+        ><i style="color: rebeccapurple" class="bi bi-info-square-fill"></i></a
       >
     </div>
   </div>
@@ -26,8 +27,7 @@
 
 <script>
 export default {
-  props: {
-    movie: {},
-  },
+  name: "MovieCard",
+  props: ["movie"],
 };
 </script>

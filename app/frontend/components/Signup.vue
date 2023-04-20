@@ -1,6 +1,6 @@
 <template>
+  <form class="container-fluid w-50 mt-5" @submit.prevent="submit">
     <h4>Signup</h4>
-    <form class="container-fluid" @submit.prevent="submit">
       <div class="form-floating mb-2">
       <input
         class="form-control"

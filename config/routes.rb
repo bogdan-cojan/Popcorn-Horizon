@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root to: "welcome#index"
   get :users, to: "users#index"
+  get :admin, to: "admin#index"
 
   namespace :apis do
     namespace :v1 do

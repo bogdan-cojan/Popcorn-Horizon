@@ -1,18 +1,16 @@
 <template>
-  <div class="btn-group" role="group">
+  <div class="fixed-top mt-2 ms-3" title="Settings">
+    <a href="/admin">
+      <i style="color: red" class="bi bi-gear-fill"></i>
+    </a>
+  </div>
+  <div class="container-fluid d-flex justify-content-center mt-1 mb-1" role="group">
       <button
-        @click="emitMoviesBtnClicked"
+        @click="sendHome()"
         type="button"
-        class="btn btn-outline-primary"
+        class="btn btn-outline-primary me-1"
       >
         Home
-      </button>
-      <button
-        @click="emitNewMovieBtnClicked"
-        type="button"
-        class="btn btn-outline-primary"
-      >
-        Create movie
       </button>
       <button v-if="currentUser.username" @click="logout"
       type="button" class="btn btn-outline-primary"
@@ -30,7 +28,6 @@
 
 <script>
 import axios from 'axios';
-import { eventBus } from '../entrypoints/eventBus';
 
 export default {
   name: "Navbar",
@@ -47,21 +44,10 @@ export default {
       window.location.href = "/";
     },
 
-    changeUrl(url) {
-      if(window.location.pathname !== url) {
-        window.history.pushState({}, '', url);
-        location.reload();
+    sendHome() {
+      if(window.location.pathname !== "/"){
+        window.location.href = "/";
       }
-    },
-
-    emitMoviesBtnClicked() {
-      this.changeUrl("/");
-      eventBus.emit('movies-btn-clicked', true);
-    },
-
-    emitNewMovieBtnClicked() {
-      this.changeUrl("/");
-      eventBus.emit('new-movie-btn-clicked', false);
     }
   }
 }
