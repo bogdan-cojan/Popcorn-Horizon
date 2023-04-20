@@ -10,11 +10,6 @@ import Login from './components/Login.vue';
 import Signup from './components/Signup.vue';
 
 export default {
-  beforeCreate() {
-    if(localStorage.getItem('token')) {
-      window.location.href = "/";
-    }
-  },
   name: "Users",
   data() {
     return {

@@ -33,3 +33,4 @@ gem 'foreman'
 gem 'activestorage'
 gem 'jwt'
 gem 'bcrypt'
+gem 'dotenv-rails', groups: [:development, :test]

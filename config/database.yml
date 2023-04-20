@@ -13,8 +13,8 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password: pass
+  username: cinema_app_db_user
+  password: <%= ENV['DATABASE_PASSWORD'] %>
   socket: /var/run/mysqld/mysqld.sock
 
 development:
@@ -52,4 +52,4 @@ production:
   <<: *default
   database: Popcorn_Horizon_production
   username: Popcorn_Horizon
-  password: <%= ENV["POPCORN_HORIZON_DATABASE_PASSWORD"] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
