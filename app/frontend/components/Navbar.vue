@@ -4,7 +4,7 @@
       <i style="color: red" class="bi bi-gear-fill"></i>
     </a>
   </div>
-  <div class="container-fluid d-flex justify-content-center mt-1 mb-1" role="group">
+  <div class="container-fluid d-flex justify-content-center mt-1 mb-2" role="group">
       <button
         @click="sendHome()"
         type="button"

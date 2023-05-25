@@ -8,14 +8,14 @@
     <div class="container-fluid" @click="this.movie=null">
       <i style="color: green;font-size: 24px;" class="bi bi-arrow-left-circle-fill"></i>
     </div>
-    <Movie :movie="this.movie" />
+    <MoviePage :movie="this.movie" />
   </div>
 </template>
 
 <script>
 import MovieCard from "./MovieCard.vue";
 import { eventBus } from "../entrypoints/eventBus";
-import Movie from "./Movie.vue";
+import MoviePage from "./MoviePage.vue";
 
 export default {
   data() {
@@ -43,7 +43,7 @@ export default {
   },
   components: {
     MovieCard,
-    Movie
-  },
+    MoviePage
+},
 };
 </script>
