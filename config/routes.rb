@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :movies, except: [:new, :edit]
       post :login, to: "sessions#create"
       post :register, to: "registrations#create"
+      resources :tickets, only: [:create, :destroy]
     end
   end
 end

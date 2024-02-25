@@ -20,17 +20,17 @@
             role="group"
           >
             <button
-              v-for="(clock, clockIndex) in clocks"
-              :key="clockIndex"
-              @click="this.form.clock = clock"
+              v-for="(time, timeIndex) in times"
+              :key="timeIndex"
+              @click="this.form.time = time"
               type="button"
               class="btn m-1 rounded fw-bold"
               :class="{
-                'btn-success': this.form.clock === clock,
-                'btn-warning': this.form.clock !== clock,
+                'btn-success': this.form.time === time,
+                'btn-warning': this.form.time !== time,
               }"
             >
-              {{ clock }}
+              {{ time }}
             </button>
           </div>
         </div>
@@ -80,13 +80,14 @@ export default {
     return {
       isFormFinished: false,
       showTickets: false,
-      clocks: ["16:00", "19:30", "23:00"],
+      times: ["16:00", "19:30", "23:00"],
       minDate: "",
       maxDate: "",
       form: {
         seats: [],
         date: "",
-        clock: "",
+        time: "",
+        //Nu cred ca ma intereseaza numele, doar emailul
         user: {
           firstName: "",
           lastName: "",

@@ -49,7 +49,7 @@ export default {
 
       for (const row in groupedSeats) {
         const seats = groupedSeats[row].join(", ");
-        seatsInfo.push(`Row ${row} Seats ${seats}`);
+        seatsInfo.push(`Row ${row}; Seats ${seats}`);
       }
 
       return seatsInfo;
