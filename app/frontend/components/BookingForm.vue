@@ -51,19 +51,35 @@
           :quantity="form.seats.length"
           :seats="form.seats"
         />
-        <UserDetails />
+        <div class="container mt-2 w-50">
+          <div class="mb-3">
+            <label class="form-label">*E-mail</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="E-mail"
+              v-model="form.user.email"
+            />
+          </div>
+        </div>
       </div>
     </div>
-    <div v-if="isFormFinished" class="d-flex justify-content-center">
-      <button type="button" class="btn btn-primary">Continue</button>
+    <div class="d-flex justify-content-evenly mt-4">
+      <button type="button" @click="toggleModal" class="btn btn-primary">Pay Later</button>
+      <button type="button" class="btn btn-primary">Pay Now</button>
     </div>
   </div>
+  <Transition name="fade-slide">
+    <Modal title="Ticket Reservation" :showModal="isModalOpen" @close="toggleModal" @save="handleSave">
+      Thank you for reserving your tickets with us. An email confirmation will be sent to you shortly after you press the "Save" button. Please remember to pay for your tickets at the cinema's box office at least 30 minutes before the movie starts. Enjoy your show!
+    </Modal>
+  </Transition>
 </template>
 
 <script>
 import SelectSeats from "./SelectSeats.vue";
 import TableInfoTickets from "./TableInfoTickets.vue";
-import UserDetails from "./UserDetails.vue";
+import Modal from "./Modal.vue";
 
 export default {
   name: "BookingForm",
@@ -71,26 +87,24 @@ export default {
   components: {
     SelectSeats,
     TableInfoTickets,
-    UserDetails,
+    Modal,
   },
   mounted() {
     this.getMinMaxDates();
   },
   data() {
     return {
-      isFormFinished: false,
+      isModalOpen: false,
       showTickets: false,
       times: ["16:00", "19:30", "23:00"],
       minDate: "",
       maxDate: "",
       form: {
+        movieId: this.movie.id,
         seats: [],
         date: "",
         time: "",
-        //Nu cred ca ma intereseaza numele, doar emailul
         user: {
-          firstName: "",
-          lastName: "",
           email: "",
         },
       },
@@ -112,6 +126,30 @@ export default {
     handleTableInfoTickets() {
       this.showTickets = true;
     },
+
+    toggleModal() {
+      this.isModalOpen = !this.isModalOpen;
+    },
+
+    handleSave() {
+      this.isModalOpen = !this.isModalOpen;
+      // post the ticket to the server
+    }
   },
 };
 </script>
+
+<style scoped>
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: opacity 0.5s, transform 0.5s; 
+  transition-timing-function: ease;
+}
+.fade-slide-enter-from, .fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.fade-slide-enter-to, .fade-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>

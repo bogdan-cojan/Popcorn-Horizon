@@ -10,6 +10,7 @@
         id="floatingTitle"
         placeholder="Title"
         v-model.trim="form.title"
+        required
       />
       <label for="floatingTitle">Title</label>
     </div>
@@ -23,6 +24,7 @@
         placeholder="Rating"
         id="floatingRating"
         v-model="form.rating"
+        required
       />
       <label for="floatingRating">Rating</label>
     </div>
@@ -33,6 +35,7 @@
         class="form-control"
         id="inputImage"
         v-on:change="onFileChange"
+        required
       />
     </div>
     <div class="form-floating col-md-6">
@@ -42,6 +45,7 @@
         id="floatingTrailerLink"
         placeholder="Trailer link"
         v-model.trim="form.trailerLink"
+        required
       />
       <label for="floatingTrailerLink">Trailer link (YouTube)</label>
     </div>
@@ -53,6 +57,7 @@
         id="floatingYear"
         placeholder="Year"
         v-model="form.year"
+        required
       />
       <label for="floatingYear">Year</label>
     </div>
@@ -65,6 +70,7 @@
         id="floatingRunningTime"
         placeholder="Running time"
         v-model="form.runningTime"
+        required
       />
       <label for="floatingRunningTime">Running time (minutes)</label>
     </div>
@@ -89,11 +95,13 @@
         placeholder="Description"
         style="height: 100px"
         v-model.trim="form.description"
+        required
       />
       <label for="floatingDescription">Description</label>
     </div>
     <div class="col-auto">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary me-4">Save</button>
+      <button @click="handleCancel" type="submit" class="btn btn-secondary">Cancel</button>
     </div>
   </form>
 </template>
@@ -134,6 +142,19 @@ export default {
     };
   },
   methods: {
+    handleCancel(){
+      this.form = {
+        title: "",
+        rating: 0.0,
+        trailerLink: "",
+        image: {},
+        year: 1900,
+        runningTime: 1,
+        selectedGenres: [],
+        description: "",
+      }
+    },
+
     onFileChange(e) {
       var file = e.target.files || e.dataTransfer.files;
       if (!file.length) return;
@@ -169,6 +190,7 @@ export default {
       });
       if(res.status === 201) {
         eventBus.emit('new-movie-added');
+        //window.location.href = "/";
       }
     },
   },

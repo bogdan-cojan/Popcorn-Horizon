@@ -4,9 +4,9 @@
       <MovieCard v-if="!this.movie" :movie="movie" @click="showMovie(movie)" />
     </div>
   </div>
-  <div v-if="this.movie" class="container-fluid">
-    <div class="container-fluid" @click="this.movie=null">
-      <i style="color: green;font-size: 24px;" class="bi bi-arrow-left-circle-fill"></i>
+  <div v-if="this.movie" class="container-fluid w-75">
+    <div class="container-fluid d-flex justify-content-start m-1">
+      <i @click="this.movie=null" style="color: green;font-size: 24px;cursor: pointer;" class="bi bi-arrow-left-circle-fill"></i>
     </div>
     <MoviePage :movie="this.movie" />
   </div>
