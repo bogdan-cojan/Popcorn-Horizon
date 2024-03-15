@@ -52,7 +52,11 @@ export default createStore({
       }
     },
 
-    async updateMovie({ commit, dispatch }, movie) {
+    async updateMovie({ commit, dispatch }, movie, newImageSelected) {
+      if(!newImageSelected) {
+        delete movie.image;
+      }
+
       const res = await dispatch('submitMovie', { movie, method: "PUT", url: `/apis/v1/movies/${movie.id}` });
       if(res.status === 200) {
         const updatedMovie = await res.json();

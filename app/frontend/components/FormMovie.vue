@@ -35,8 +35,12 @@
         class="form-control"
         id="inputImage"
         v-on:change="onFileChange"
-        required
+        v-bind:required="!movie"
       />
+      <small v-if="movie" class="form-text text-muted">
+        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+        Current image: <span class="text-warning">{{ imageName }}</span>. You only need to choose a new image if you want to change the current one.
+      </small>
     </div>
     <div class="form-floating col-md-6">
       <input
@@ -111,6 +115,7 @@ export default {
   props: ["movie"],
   data() {
     return {
+      newImageSelected: false,
       form: this.movie || {
         title: "",
         rating: 0.0,
@@ -140,6 +145,12 @@ export default {
       ],
     };
   },
+  computed: {
+    imageName() {
+      if (!this.movie) return "";
+      return new URL(this.form.image).pathname.split('/').pop();
+    }
+  },
   methods: {
     handleCancel(){
       this.form = {
@@ -159,11 +170,12 @@ export default {
       var file = e.target.files || e.dataTransfer.files;
       if (!file.length) return;
       this.form.image = file[0];
+      this.newImageSelected = true;
     },
 
     async submitHandler() {
       if (this.movie) {
-        this.$store.dispatch('updateMovie', this.form);
+        this.$store.dispatch('updateMovie', this.form, this.newImageSelected);
       } else {
         this.$store.dispatch('createMovie', this.form);
       }
