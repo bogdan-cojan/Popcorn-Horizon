@@ -52,8 +52,9 @@ export default createStore({
       }
     },
 
-    async updateMovie({ commit, dispatch }, movie, newImageSelected) {
+    async updateMovie({ commit, dispatch }, { movie, newImageSelected }) {
       if(!newImageSelected) {
+        console.log("image new selected: ", newImageSelected);
         delete movie.image;
       }
 

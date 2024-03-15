@@ -39,7 +39,7 @@
       />
       <small v-if="movie" class="form-text text-muted">
         <i class="bi bi-exclamation-triangle-fill text-warning"></i>
-        Current image: <span class="text-warning">{{ imageName }}</span>. You only need to choose a new image if you want to change the current one.
+        Current image: <span class="text-warning">{{ this.imageName }}</span>. You only need to choose a new image if you want to change the current one.
       </small>
     </div>
     <div class="form-floating col-md-6">
@@ -116,6 +116,7 @@ export default {
   data() {
     return {
       newImageSelected: false,
+      imageName: "",
       form: this.movie || {
         title: "",
         rating: 0.0,
@@ -145,11 +146,8 @@ export default {
       ],
     };
   },
-  computed: {
-    imageName() {
-      if (!this.movie) return "";
-      return new URL(this.form.image).pathname.split('/').pop();
-    }
+  created() {
+    this.imageName = this.getImageName();
   },
   methods: {
     handleCancel(){
@@ -166,6 +164,11 @@ export default {
       this.$emit("cancel");
     },
 
+    getImageName() {
+      if (!this.movie) return "";
+      return new URL(this.movie.image).pathname.split('/').pop();
+    },
+
     onFileChange(e) {
       var file = e.target.files || e.dataTransfer.files;
       if (!file.length) return;
@@ -175,7 +178,7 @@ export default {
 
     async submitHandler() {
       if (this.movie) {
-        this.$store.dispatch('updateMovie', this.form, this.newImageSelected);
+        this.$store.dispatch('updateMovie', { movie: this.form, newImageSelected: this.newImageSelected });
       } else {
         this.$store.dispatch('createMovie', this.form);
       }
