@@ -26,8 +26,9 @@ class Apis::V1::MoviesController < ApplicationController
 
   def update
     @movie = Movie.find(params[:id])
-    render json: @movie.errors unless @movie.update(movie_params)
-    render json: get_formatted_movie(@movie), status: 201 if @movie.update(movie_params)
+    genres = JSON.parse(movie_params[:genres])
+    render json: @movie.errors unless @movie.update(movie_params.merge(genres: genres))
+    render json: get_formatted_movie(@movie), status: 200 if @movie.update(movie_params.merge(genres: genres))
   end
 
   def destroy

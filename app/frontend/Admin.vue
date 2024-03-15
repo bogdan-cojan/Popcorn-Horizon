@@ -2,14 +2,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2">
-        <AdminMenu 
-          @dashboard-btn-clicked="changeChild()"
-          @create-movie-btn-clicked="changeChild()"
-        />
+        <AdminMenu @selectedView="handleView" :currentView="selectedView" />
       </div>
       <div class="col-md-10">
-        <AdminDashboard v-if="isChildVisible"/>
-        <FormMovie v-if="!isChildVisible"/>
+        <AdminDashboard v-if="selectedView === 'dashboard'" @editMovie="handleEdit"/>
+        <FormMovie v-if="selectedView === 'form'" :movie="movieToEdit" @cancel="handleCancel"/>
       </div>
     </div>
   </div>
@@ -29,12 +26,28 @@ export default {
   },
   data() {
     return {
-      isChildVisible: true,
+      selectedView: 'dashboard',
+      movieToEdit: null,
     }
   },
   methods: {
-    changeChild() {
-      this.isChildVisible = !this.isChildVisible;
+    resetMovieToEdit() {
+      this.movieToEdit = null;
+    },
+    
+    handleCancel() {
+      this.resetMovieToEdit();
+      this.selectedView = 'dashboard';
+    },
+
+    handleEdit(movie) {
+      this.movieToEdit = movie;
+      this.selectedView = 'form';
+    },
+
+    handleView(newView) {
+      this.resetMovieToEdit();
+      this.selectedView = newView;
     }
   }
 }

@@ -44,7 +44,7 @@
         class="form-control"
         id="floatingTrailerLink"
         placeholder="Trailer link"
-        v-model.trim="form.trailerLink"
+        v-model.trim="form.trailer_link"
         required
       />
       <label for="floatingTrailerLink">Trailer link (YouTube)</label>
@@ -69,7 +69,7 @@
         class="form-control"
         id="floatingRunningTime"
         placeholder="Running time"
-        v-model="form.runningTime"
+        v-model="form.running_time"
         required
       />
       <label for="floatingRunningTime">Running time (minutes)</label>
@@ -78,7 +78,7 @@
     <div v-for="genre in genres" :key="genre.id" class="form-check col-auto">
       <input
         :value="genre.name"
-        v-model="this.form.selectedGenres"
+        v-model="form.genres"
         class="form-check-input"
         type="checkbox"
         id="gridCheck"
@@ -107,19 +107,18 @@
 </template>
 
 <script>
-import { eventBus } from '../entrypoints/eventBus';
-
 export default {
+  props: ["movie"],
   data() {
     return {
-      form: {
+      form: this.movie || {
         title: "",
         rating: 0.0,
-        trailerLink: "",
+        trailer_link: "",
         image: {},
         year: 1900,
-        runningTime: 1,
-        selectedGenres: [],
+        running_time: 1,
+        genres: [],
         description: "",
       },
       genres: [
@@ -146,13 +145,14 @@ export default {
       this.form = {
         title: "",
         rating: 0.0,
-        trailerLink: "",
+        trailer_link: "",
         image: {},
         year: 1900,
-        runningTime: 1,
-        selectedGenres: [],
+        running_time: 1,
+        genres: [],
         description: "",
-      }
+      };
+      this.$emit("cancel");
     },
 
     onFileChange(e) {
@@ -162,35 +162,10 @@ export default {
     },
 
     async submitHandler() {
-      // let bodyContent = JSON.stringify({
-      //   title: movie_params.title,
-      //   image: movie_params.image,
-      // });
-
-      const formData = new FormData();
-
-      // for (const name in this.form) {
-      //   formData.append(name, this.form[name]);
-      // }
-
-      formData.append("title", this.form.title);
-      formData.append("rating", this.form.rating);
-      formData.append("trailer_link", this.form.trailerLink);
-      formData.append("image", this.form.image);
-      formData.append("year", this.form.year);
-      formData.append("running_time", this.form.runningTime);
-      formData.append("genres", JSON.stringify(this.form.selectedGenres));
-      formData.append("description", this.form.description);
-
-      // console.log(formData);
-
-      const res = await fetch("/apis/v1/movies", {
-        method: "POST",
-        body: formData,
-      });
-      if(res.status === 201) {
-        eventBus.emit('new-movie-added');
-        //window.location.href = "/";
+      if (this.movie) {
+        this.$store.dispatch('updateMovie', this.form);
+      } else {
+        this.$store.dispatch('createMovie', this.form);
       }
     },
   },

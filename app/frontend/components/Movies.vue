@@ -13,14 +13,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import MovieCard from "./MovieCard.vue";
-import { eventBus } from "../entrypoints/eventBus";
 import MoviePage from "./MoviePage.vue";
 
 export default {
+  computed: mapState(['movies']),
   data() {
     return {
-      movies: [],
       movie: null,
     };
   },
@@ -28,18 +28,9 @@ export default {
     showMovie(movie) {
       this.movie = movie;
     },
-
-    async fetchMovies() {
-      const res = await fetch("/apis/v1/movies");
-      const data = await res.json();
-      this.movies = data;
-    },
   },
   async created() {
-    await this.fetchMovies();
-    eventBus.on('new-movie-added', async () => {
-      await this.fetchMovies();
-    })
+    this.$store.dispatch('fetchMovies');
   },
   components: {
     MovieCard,
