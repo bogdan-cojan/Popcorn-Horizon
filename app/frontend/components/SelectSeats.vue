@@ -8,26 +8,19 @@
         :class="{
           'btn-success': !isSelected(seat),
           'btn-warning': isSelected(seat),
-          'btn-danger':
-            !noSavedSeats && this.selectedSeats.some((s) => s.seat === seat),
+          'btn-danger': isSelected(seat),
         }"
         @click="toggleSeat(rowIndex, seat)"
       >
         {{ seat }}
       </button>
     </div>
-    <button
-      v-if="noSavedSeats"
-      class="btn btn-primary mt-3"
-      @click="saveSeats()"
-    >
-      Save
-    </button>
   </div>
 </template>
 
 <script>
 export default {
+  inject: ["form"],
   name: "SelectSeats",
   data() {
     return {
@@ -36,33 +29,20 @@ export default {
         [4, 5, 6],
         [7, 8, 9],
       ],
-      selectedSeats: [],
-      noSavedSeats: true,
     };
   },
   methods: {
     toggleSeat(rowIndex, seat) {
-      const seatIndex = this.selectedSeats.findIndex((s) => s.seat === seat);
+      const seatIndex = this.form.seats.findIndex((s) => s.seat === seat);
       if (seatIndex === -1) {
-        this.selectedSeats.push({ row: rowIndex + 1, seat: seat });
+        this.form.seats.push({ row: rowIndex + 1, seat: seat });
       } else {
-        this.noSavedSeats = true;
-        this.selectedSeats.splice(seatIndex, 1);
+        this.form.seats.splice(seatIndex, 1);
       }
     },
 
     isSelected(seat) {
-      return this.selectedSeats.some((s) => s.seat === seat);
-    },
-
-    saveSeats() {
-      if (this.selectedSeats.length === 0) {
-        alert("No seats selected !");
-      } else {
-        this.noSavedSeats = false;
-        this.$emit("selected-seats", this.selectedSeats);
-        this.$emit("save-btn-clicked");
-      }
+      return this.form.seats.some((s) => s.seat === seat);
     },
   },
 };

@@ -9,7 +9,7 @@ class Ticket < ApplicationRecord
       row_number = seat[:row]
       seat_number = seat[:seat]
       seat_id = "R#{row_number}-S#{seat_number}"
-      Ticket.create(movie_id: params[:movieId], date: params[:date], time: params[:time], seat_number: seat_id, user_id: user.id || nil)
+      Ticket.create(movie_id: params[:movieId], date: params[:date], time: params[:time], seat_number: seat_id, user_id: user&.id)
     end
   end
 end

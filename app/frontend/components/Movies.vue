@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid row row-cols-1 row-cols-md-3 g-4">
-    <div class="col" :key="movie.id" v-for="movie in this.movies">
+    <div class="col" :key="movie.id" v-for="movie in this.list">
       <MovieCard v-if="!this.movie" :movie="movie" @click="showMovie(movie)" />
     </div>
   </div>
@@ -18,7 +18,7 @@ import MovieCard from "./MovieCard.vue";
 import MoviePage from "./MoviePage.vue";
 
 export default {
-  computed: mapState(['movies']),
+  computed: mapState('movies', ['list']),
   data() {
     return {
       movie: null,
@@ -30,7 +30,7 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch('fetchMovies');
+    this.$store.dispatch('movies/index');
   },
   components: {
     MovieCard,

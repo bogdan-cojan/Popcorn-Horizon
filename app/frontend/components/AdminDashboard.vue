@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="movie in movies" :key="movie.id">
+      <tr v-for="movie in this.list" :key="movie.id">
         <td>{{ movie.title }}</td>
         <td>{{ movie.description }}</td>
         <td class="d-flex justify-content-center">
@@ -38,7 +38,7 @@ import Modal from './Modal.vue';
 
 export default {
   name: "AdminDashboard",
-  computed: mapState(['movies']),
+  computed: mapState('movies', ['list']),
   components: {
     Modal,
   },
@@ -68,11 +68,11 @@ export default {
     },
     
     deleteMovie(id) {
-      this.$store.dispatch('deleteMovie', id);
+      this.$store.dispatch('movies/delete', id);
     }
   },
   created() {
-    this.$store.dispatch('fetchMovies');
+    this.$store.dispatch('movies/index');
   },
 };
 </script>

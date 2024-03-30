@@ -1,72 +1,45 @@
 <template>
-  <div class="container">
+  <div class="container-fluid row g-3 align-items-center mt-2">
     <div class="row">
       <div class="col-md-6">
         <h2 class="d-flex justify-content-center mb-2">
           Buy ticket for {{ movie.title }}
         </h2>
-        <div class="form-group">
-          <label for="date">Select a date:</label>
-          <input
-            v-model="form.date"
-            class="form-control"
-            type="date"
-            name="date"
-            :min="minDate"
-            :max="maxDate"
-          />
-          <div
-            class="btn-group mt-4 d-flex justify-content-center"
-            role="group"
-          >
-            <button
-              v-for="(time, timeIndex) in times"
-              :key="timeIndex"
-              @click="this.form.time = time"
-              type="button"
-              class="btn m-1 rounded fw-bold"
-              :class="{
-                'btn-success': this.form.time === time,
-                'btn-warning': this.form.time !== time,
-              }"
-            >
-              {{ time }}
-            </button>
-          </div>
+        <SelectDates />
+      </div>
+      <Transition name="fade-slide">
+        <div v-if="form.date && form.time" class="col-md-6">
+          <h2 class="d-flex justify-content-center mb-2">Select your seat:</h2>
+          <SelectSeats />
         </div>
-      </div>
-      <div class="col-md-6">
-        <h2 class="d-flex justify-content-center mb-2">Select your seat:</h2>
-        <SelectSeats
-          @selected-seats="handleSelectedSeats"
-          @save-btn-clicked="handleTableInfoTickets"
-        />
-      </div>
+      </Transition>
     </div>
     <div class="row mt-3">
-      <div class="col-md-12">
-        <TableInfoTickets
-          v-if="showTickets"
-          :movie="movie"
-          :quantity="form.seats.length"
-          :seats="form.seats"
-        />
-        <div class="container mt-2 w-50">
-          <div class="mb-3">
-            <label class="form-label">*E-mail</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="E-mail"
-              v-model="form.user.email"
-            />
-          </div>
+      <Transition name="fade-slide">
+        <div v-if="form.date && form.time && form.seats.length > 0" class="col-md-12">
+          <TableInfoTickets
+            :movie="movie"
+            :quantity="form.seats.length"
+            :seats="form.seats"
+          />
+          <form class="container mt-2 w-50" @submit.prevent="handlePayment">
+            <div class="mb-3">
+              <label class="form-label">*E-mail</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="E-mail"
+                v-model="form.user.email"
+                required
+              />
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+              <button type="submit" data-payment-type="later" class="btn btn-primary me-2">Pay Later</button>
+              <button type="submit" data-payment-type="now" class="btn btn-primary">Pay Now</button>
+            </div>
+          </form>
         </div>
-      </div>
-    </div>
-    <div class="d-flex justify-content-evenly mt-4">
-      <button type="button" @click="toggleModal" class="btn btn-primary">Pay Later</button>
-      <button type="button" class="btn btn-primary">Pay Now</button>
+      </Transition>
     </div>
   </div>
   <Transition name="fade-slide">
@@ -77,28 +50,28 @@
 </template>
 
 <script>
+import SelectDates from "./SelectDates.vue";
 import SelectSeats from "./SelectSeats.vue";
 import TableInfoTickets from "./TableInfoTickets.vue";
 import Modal from "./Modal.vue";
 
 export default {
+  provide() {
+    return {
+      form: this.form,
+    };
+  },
   name: "BookingForm",
   props: ["movie"],
   components: {
+    SelectDates,
     SelectSeats,
     TableInfoTickets,
     Modal,
   },
-  mounted() {
-    this.getMinMaxDates();
-  },
   data() {
     return {
       isModalOpen: false,
-      showTickets: false,
-      times: ["16:00", "19:30", "23:00"],
-      minDate: "",
-      maxDate: "",
       form: {
         movieId: this.movie.id,
         seats: [],
@@ -111,29 +84,23 @@ export default {
     };
   },
   methods: {
-    getMinMaxDates() {
-      const today = new Date().toISOString().split("T")[0];
-      const oneMonthLater = new Date();
-      oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-      this.minDate = today;
-      this.maxDate = oneMonthLater.toISOString().split("T")[0];
-    },
-
-    handleSelectedSeats(selectedSeats) {
-      this.form.seats = selectedSeats;
-    },
-
-    handleTableInfoTickets() {
-      this.showTickets = true;
-    },
-
     toggleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
 
-    handleSave() {
-      this.isModalOpen = !this.isModalOpen;
-      // post the ticket to the server
+    handlePayment(event) {
+      const paymentType = event.submitter.dataset.paymentType;
+      if (paymentType === 'later') {
+        this.toggleModal();
+      } else if (paymentType === 'now'){
+        // stripe payment
+        alert('Payment successful!');
+      }
+    },
+
+    async handleSave() {
+      this.toggleModal();
+      this.$store.dispatch("tickets/create", this.form);
     }
   },
 };

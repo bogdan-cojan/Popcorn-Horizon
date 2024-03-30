@@ -178,9 +178,9 @@ export default {
 
     async submitHandler() {
       if (this.movie) {
-        this.$store.dispatch('updateMovie', { movie: this.form, newImageSelected: this.newImageSelected });
+        this.$store.dispatch('movies/update', { movie: this.form, newImageSelected: this.newImageSelected });
       } else {
-        this.$store.dispatch('createMovie', this.form);
+        this.$store.dispatch('movies/create', this.form);
       }
     },
   },
