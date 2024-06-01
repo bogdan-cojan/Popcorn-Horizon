@@ -10,12 +10,28 @@ import Users from "../Users.vue";
 import Admin from "../Admin.vue";
 
 createApp(Navbar).mount("#navbar");
-createApp(App).use(store).mount("#app");
+if (document.querySelector("#app")) {
+  createApp(App).use(store).mount("#app");
+}
 if(isLoggedIn() && window.location.pathname === "/users") {
   window.location.href = "/";
-} else { createApp(Users).mount("#users") }
-createApp(Admin).use(store).mount("#admin");
+} else { 
+  if (document.querySelector("#users")) {
+    createApp(Users).mount("#users");
+  }
+}
+if(isAdmin()){
+  if (document.querySelector("#admin")) {
+    createApp(Admin).use(store).mount("#admin");
+  }
+} else if(window.location.pathname === "/admin") {
+  window.location.href = "/";
+}
 
 function isLoggedIn() {
   return localStorage.getItem('token') !== null;
+}
+
+function isAdmin() {
+  return localStorage.getItem('admin') === 'true';
 }

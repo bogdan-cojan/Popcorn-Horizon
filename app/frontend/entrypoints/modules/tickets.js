@@ -19,7 +19,7 @@ export default{
       });
 
       if(res.status === 201) {
-        alert("Yuhuu!Tickets created successfully!");
+        window.location.href = "/";
       }
     },
   },

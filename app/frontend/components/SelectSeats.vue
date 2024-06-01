@@ -8,8 +8,9 @@
         :class="{
           'btn-success': !isSelected(seat),
           'btn-warning': isSelected(seat),
-          'btn-danger': isSelected(seat),
+          'btn-danger': isReserved(rowIndex + 1, seat),
         }"
+        :disabled="isReserved(rowIndex + 1, seat)"
         @click="toggleSeat(rowIndex, seat)"
       >
         {{ seat }}
@@ -20,6 +21,7 @@
 
 <script>
 export default {
+  props: ['takenSeats'],
   inject: ["form"],
   name: "SelectSeats",
   data() {
@@ -44,6 +46,10 @@ export default {
     isSelected(seat) {
       return this.form.seats.some((s) => s.seat === seat);
     },
+
+    isReserved(row, seat) {
+      return this.takenSeats.some(takenSeat => takenSeat.seat === `R${row}-S${seat}`);
+    }
   },
 };
 </script>
