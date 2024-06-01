@@ -53,8 +53,16 @@ export default {
       });
       const token = response.data.token;
       const username = response.data.username;
+      const admin = response.data.admin;
+      const email = response.data.email;
       localStorage.setItem('token', token);
-      localStorage.setItem('username', username);
+      localStorage.setItem('admin', admin);
+      localStorage.setItem('email', email);
+      await cookieStore.set({
+        name: 'username',
+        value: username,
+        expires: new Date(Date.now() + 86400000),
+      });
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       window.location.href = '/';
     },

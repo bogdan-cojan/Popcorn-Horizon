@@ -2,16 +2,16 @@
   <table class="table table-striped table-hover table-bordered mt-2">
     <thead class="table-dark">
       <tr>
+        <th>Id</th>
         <th>Title</th>
-        <th>Description</th>
         <th>Edit</th>
         <th>Delete</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="movie in this.list" :key="movie.id">
+        <td>{{ movie.id }}</td>
         <td>{{ movie.title }}</td>
-        <td>{{ movie.description }}</td>
         <td class="d-flex justify-content-center">
           <button class="btn btn-primary" @click="editMovie(movie)">
             <i class="bi bi-pencil-fill"></i> Edit
@@ -26,8 +26,8 @@
     </tbody>
   </table>
   <Transition name="fade-slide">
-    <Modal title="Confirm Deletion" :showModal="isModalOpen" @close="toggleModal" @save="handleSave">
-      Are you sure you want to delete this movie? This action cannot be undone.
+    <Modal title="Confirma stergerea" :showModal="isModalOpen" @close="toggleModal" @save="handleSave">
+      Sigur doriți să ștergeți acest film? Această acțiune nu poate fi anulată.
     </Modal>
   </Transition>
 </template>

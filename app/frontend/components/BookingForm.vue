@@ -3,14 +3,14 @@
     <div class="row">
       <div class="col-md-6">
         <h2 class="d-flex justify-content-center mb-2">
-          Buy ticket for {{ movie.title }}
+          Cumpărați bilet pentru {{ movie.title }}
         </h2>
         <SelectDates />
       </div>
       <Transition name="fade-slide">
         <div v-if="form.date && form.time" class="col-md-6">
-          <h2 class="d-flex justify-content-center mb-2">Select your seat:</h2>
-          <SelectSeats />
+          <h2 class="d-flex justify-content-center mb-2">Selectează-ți locul:</h2>
+          <SelectSeats :taken-seats="takenSeats" />
         </div>
       </Transition>
     </div>
@@ -28,14 +28,15 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="E-mail"
-                v-model="form.user.email"
+                :placeholder="email ? email : 'E-mail'"
+                :disabled="email"
+                :value="form.user.email"
                 required
               />
             </div>
             <div class="d-flex justify-content-center mt-4">
-              <button type="submit" data-payment-type="later" class="btn btn-primary me-2">Pay Later</button>
-              <button type="submit" data-payment-type="now" class="btn btn-primary">Pay Now</button>
+              <button type="submit" data-payment-type="later" class="btn btn-primary me-2">Rezerva</button>
+              <!-- <button type="submit" data-payment-type="now" class="btn btn-primary">Pay Now</button> -->
             </div>
           </form>
         </div>
@@ -43,8 +44,8 @@
     </div>
   </div>
   <Transition name="fade-slide">
-    <Modal title="Ticket Reservation" :showModal="isModalOpen" @close="toggleModal" @save="handleSave">
-      Thank you for reserving your tickets with us. An email confirmation will be sent to you shortly after you press the "Save" button. Please remember to pay for your tickets at the cinema's box office at least 30 minutes before the movie starts. Enjoy your show!
+    <Modal title="Rezervare bilet" :showModal="isModalOpen" @close="toggleModal" @save="handleSave">
+      Vă mulțumim că ați rezervat biletele la noi. După ce apăsați butonul „Save”, biletele dvs. pentru film vor fi disponibile pe pagina de "Bilete". Vă rugăm să nu uitați să plătiți biletele la casa cinematografului cu cel puțin 30 de minute înainte de începerea filmului. Bucurați-vă de spectacol!
     </Modal>
   </Transition>
 </template>
@@ -54,6 +55,7 @@ import SelectDates from "./SelectDates.vue";
 import SelectSeats from "./SelectSeats.vue";
 import TableInfoTickets from "./TableInfoTickets.vue";
 import Modal from "./Modal.vue";
+import axios from "axios";
 
 export default {
   provide() {
@@ -71,6 +73,9 @@ export default {
   },
   data() {
     return {
+      email: '',
+      takenSeats: [],
+      currentUser: '',
       isModalOpen: false,
       form: {
         movieId: this.movie.id,
@@ -78,24 +83,65 @@ export default {
         date: "",
         time: "",
         user: {
-          email: "",
+          email: this.getEmail(),
         },
       },
     };
   },
+  watch: {
+    'form.date': 'getTakenSeats',
+    'form.time': 'getTakenSeats',
+  },
+  async created() {
+    this.currentUser = await this.setUsername(); 
+    this.email = this.getEmail();
+  },
   methods: {
+    async getTakenSeats() {
+      if (this.form.date && this.form.time) {
+        try {
+          const response = await axios.get('apis/v1/tickets/find_tickets_by_date_time', {
+            params: {
+              date: this.form.date,
+              time: this.form.time
+            }
+          });
+          this.takenSeats = response.data.data
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+
     toggleModal() {
       this.isModalOpen = !this.isModalOpen;
+    },
+
+    async setUsername() {
+      if(localStorage.getItem('token') !== null){
+        const usernameCookie = await cookieStore.get('username');
+        if(usernameCookie){
+          return usernameCookie.value;
+        }
+      }
     },
 
     handlePayment(event) {
       const paymentType = event.submitter.dataset.paymentType;
       if (paymentType === 'later') {
-        this.toggleModal();
+        if(localStorage.getItem('token') !== null){
+          this.toggleModal();
+        }else{
+          window.location.href = '/users';
+        }
       } else if (paymentType === 'now'){
         // stripe payment
         alert('Payment successful!');
       }
+    },
+
+    getEmail() {
+      return localStorage.getItem('email');
     },
 
     async handleSave() {

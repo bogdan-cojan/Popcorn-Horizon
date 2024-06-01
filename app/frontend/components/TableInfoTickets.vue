@@ -12,28 +12,30 @@
       <tr>
         <td>{{ movie.title }}</td>
         <td>{{ quantity }}</td>
-        <td>{{ price }} lei</td>
+        <td>{{ ticketsPrice }} lei</td>
         <td>
           <p v-for="info in getSeatsInfo" :key="info">{{ info }}</p>
         </td>
       </tr>
     </tbody>
   </table>
-  <p class="mt-3 fw-bold mb-4">Grand Total {{ getGrandTotal }} lei</p>
+  <p class="mt-3 fw-bold mb-4">Total {{ getGrandTotal }} lei</p>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: "TableInfoTickets",
   props: ["movie", "quantity", "seats"],
   data() {
     return {
-      price: 25,
+      ticketsPrice: 25,
     };
   },
   computed: {
     getGrandTotal() {
-      return this.quantity * this.price;
+      return this.quantity * this.ticketsPrice;
     },
 
     getSeatsInfo() {

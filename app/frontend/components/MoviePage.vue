@@ -25,7 +25,7 @@
         aria-controls="book-tab-pane"
         aria-selected="true"
       >
-        Book ticket
+        Rezerva bilet
       </button>
     </li>
   </ul>

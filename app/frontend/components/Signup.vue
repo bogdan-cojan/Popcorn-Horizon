@@ -66,9 +66,15 @@ export default {
           password: this.password,
           password_confirmation: this.passwordConfirmation,
         },
-      }).then((response) => {
+      }).then(async (response) => {
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('admin', response.data.admin);
+        localStorage.setItem('email', response.data.email);
+        await cookieStore.set({
+          name: 'username',
+          value: response.data.username,
+          expires: new Date(Date.now() + 86400000),
+        });
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
         window.location.href = '/';
       }).catch((error) => {
