@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid ps-5 pb-4 row row-cols-1 row-cols-md-3 g-4">
+  <div class="container-fluid ps-5 row row-cols-1 row-cols-md-3 g-4">
     <div class="col" :key="movie.id" v-for="movie in this.list">
       <MovieCard v-if="!this.movie" :movie="movie" @click="showMovie(movie)" />
     </div>
